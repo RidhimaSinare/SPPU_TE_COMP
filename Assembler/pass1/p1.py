@@ -113,7 +113,7 @@ for line in program:
             op1=cmd[1]
             if '-' in op1:
                 label=op1.split('-')[0]
-                offset=op1.spli('+')[1]
+                offset=op1.spli('-')[1]
                 op1code=f"(S,{symboltable.get(label)[0]})-{offset}"
                 previous=current
                 relativeAddress.append(previous)
