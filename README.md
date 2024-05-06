@@ -1,1 +1,1 @@
-Assigments performed in Third Year Computer Engineering
+Assigments performed in LP2 - SEM6- Third Year Computer Engineering
