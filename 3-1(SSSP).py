@@ -1,65 +1,63 @@
-#Minimum spanning / single source shortest path problem
-#SSP problem using Djikstra's algorithm for city map
+#SSSP
 
 class Graph:
 
-    def __init__(self, vertices):
+    def __init__(self, vertices) -> None:
         self.V = vertices
-        self.graph = {v: {} for v in vertices}
-
+        self.n = len(vertices)
+        self.graph = {v:{} for v in self.V}
+    
     def addEdge(self, u, v, w):
-        #directed graph
+
         self.graph[u][v] = w
     
-    def djikstra(self, source):
+    def djikstra(self, src):
 
         visited = set()
-        distances = {v: float('inf') for v in self.V}
-        distances[source] = 0
+        distances = {i:float('inf') for i in self.V}    #in self.V i.e for each vertex not in range
+        distances[src] = 0
 
-        #iterate while all vertices are visited
-        while len(visited) < len(self.V):
+        while len(visited) < self.n:
 
-            minnode = None
             mindist = float('inf')
-            for node in self.V:
-                if node not in visited and distances[node] < mindist:
-                    mindist = distances[node]
-                    minnode = node
-            #add the minnode to visited
+            minvertex = None
 
-            visited.add(minnode)
+            for v in self.V:
+                if v not in visited and distances[v] < mindist:
+                    mindist = distances[v]
+                    minvertex = v
 
-            for neighbour, weight in self.graph[minnode].items():
+            visited.add(minvertex)  #imp
+            
+            for v, w in self.graph[minvertex].items():
 
-                dist = distances[minnode] + weight
+                dist = distances[minvertex] + w
 
-                if dist < distances[neighbour]:
-                    distances[neighbour] = dist
-
-        print("\nPlace \tDistance From", source)
+                if dist < distances[v]:
+                    distances[v] = dist
+            
         for place, dist in distances.items():
-            print(place, "\t", dist)
+            print(place, " -> ",dist)
 
 if __name__=="__main__":
 
-    places = input("Enter the locations in the map with spaces: ").split()
+    places = input("Enter locations/vertex: ").split()
 
     g = Graph(places)
 
-    E = int(input("Enter the number of edges in map: "))
-    print("For each edge enter src, dest and weight: ")
+    e = int(input("Enter number of edges: "))
 
-    for _ in range(E):
+    for _ in range(e):
+
         u, v, w = input().split()
-        g.addEdge(u, v, int(w))
+        g.addEdge(u, v, int(w)) #int(w) not just w
     
-    
-    source_place = input("Enter the name of the source vertex: ")
-    g.djikstra(source_place)
-
-            
-    
+    src = input("Enter src: ")
+    g.djikstra(src)
 
 
-    
+
+
+
+
+
