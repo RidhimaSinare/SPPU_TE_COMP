@@ -3,64 +3,65 @@
 class Graph:
 
     def __init__(self, vertices) -> None:
-        self.vertex_map = {}
         self.V = len(vertices)
         self.graph = [[] for i in range(self.V)]
+        self.vertex_map = {}
+
         for idx, vertex in enumerate(vertices):
             self.vertex_map[vertex] = idx
     
     def addEdge(self, u, v, w):
+
         uidx = self.vertex_map[u]
         vidx = self.vertex_map[v]
-        self.graph[uidx].append((vidx,w))
-        self.graph[vidx].append((uidx,w))
-    
+        self.graph[uidx].append((vidx, w))
+        self.graph[vidx].append((uidx, w))
+
     def prims(self):
 
-        cost = 0
-        unvisited = set(range(self.V))
         mst = set()
+        unvisited = set(range(self.V))
+        cost = 0
 
-        mst.add(0)
+        mst.add(0)  #remember to add first in mst and remove from unvisited
         unvisited.remove(0)
 
         while unvisited:
 
-            minweight = float('inf')
             minedge = None
+            mindist = float('inf')
 
             for u in mst:
-                for v, w in self.graph[u]:
 
-                    if v in unvisited and w < minweight:
-                        minweight = w
+                for v, w in self.graph[u]:  #not items()
+
+                    if v in unvisited and w<mindist:
                         minedge = (u,v)
+                        mindist = w
             
             if minedge:
 
-                cost += minweight
                 u, v = minedge
-                # prin")
+                cost += mindist
+                unvisited.remove(v) #remember to both add and remove
                 mst.add(v)
-                unvisited.remove(v)
         
-        print("Total cost: ", cost)
+        print("Final cost: ", cost)
 
-def main():
-    num_vertices = int(input("Enter the number of routers: "))
-    vertices = input("Enter the hostname of the routers separated by space: ").split()
-    g = Graph(vertices)
 
-    edges = int(input("Enter the number of cables in the network: "))
-    print("Enter the connections and cost for each cable (source,destination,cost): ")
-    for _ in range(edges):
-        u,v,w=input().split()
-        g.addEdge(u,v,int(w))
-    print("\n MST for routing  network: ")
+if __name__=="__main__":
+
+    routers = input("Enter router names: ").split()
+
+    g = Graph(routers)
+
+    e = int(input("Enter number of connections: "))
+
+    for _ in range(e):
+        
+        u, v, w = input("Enter route and weight: ").split()
+        g.addEdge(u, v, int(w))
+    
     g.prims()
 
-    print(g.graph)
     print(g.vertex_map)
-
-main()
-    
